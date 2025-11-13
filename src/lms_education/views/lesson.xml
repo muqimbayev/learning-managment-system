@@ -1,0 +1,58 @@
+<odoo>
+    <record id="view_le_lesson_list" model="ir.ui.view">
+        <field name="name">le.lesson.list</field>
+        <field name="model">le.lesson</field>
+        <field name="arch" type="xml">
+            <list string="Lessons">
+                <field name="name"/>
+                <field name="course_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_le_lesson_form" model="ir.ui.view">
+        <field name="name">le.lesson.form</field>
+        <field name="model">le.lesson</field>
+        <field name="arch" type="xml">
+            <form string="Lesson">
+                <header/>
+                <sheet>
+                    <!-- <div class="oe_button_box" name="button_box">
+                        <button name="action_view_homeworks"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-book">
+                            <field name="homework_count" widget="statinfo" string="Homeworks"/>
+                        </button>
+                    </div> -->
+
+                    <group>
+                        <field name="name"/>
+                        <field name="course_id"/>
+                    </group>
+
+                    <notebook>
+                        <page string="Homeworks">
+                            <field name="homework_ids">
+                                <list editable="bottom">
+                                    <field name="name"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_le_lesson" model="ir.actions.act_window">
+        <field name="name">Lessons</field>
+        <field name="res_model">le.lesson</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_le_lesson"
+              name="Lessons"
+              parent="menu_le_root"
+              action="action_le_lesson"/>
+</odoo>

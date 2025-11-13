@@ -1,0 +1,56 @@
+<odoo>
+    <record id="view_le_group_list" model="ir.ui.view">
+        <field name="name">le.group.list</field>
+        <field name="model">le.group</field>
+        <field name="arch" type="xml">
+            <list string="Groups">
+                <field name="name"/>
+                <field name="course_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_le_group_form" model="ir.ui.view">
+        <field name="name">le.group.form</field>
+        <field name="model">le.group</field>
+        <field name="arch" type="xml">
+            <form string="Group">
+                        <header>
+                            <button name="action_generate_lessons"
+                                    type="object"
+                                    string="Generate Lessons"
+                                    class="btn-primary"/>
+                        </header>
+                <sheet>
+
+                    <group>
+                        <field name="name"/>
+                        <field name="course_id"/>
+                    </group>
+
+                    <notebook>
+                        <page string="Students">
+                            <field name="student_ids">
+                                <list editable="bottom">
+                                    <field name="student_id"/>
+                                    <field name="status"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_le_group" model="ir.actions.act_window">
+        <field name="name">Groups</field>
+        <field name="res_model">le.group</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_le_group"
+              name="Groups"
+              parent="menu_le_root"
+              action="action_le_group"/>
+</odoo>

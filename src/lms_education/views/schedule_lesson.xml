@@ -1,0 +1,46 @@
+<odoo>
+    <record id="view_le_schedule_lesson_list" model="ir.ui.view">
+        <field name="name">le.schedule.lesson.list</field>
+        <field name="model">le.schedule.lesson</field>
+        <field name="arch" type="xml">
+            <list string="Schedule Lessons">
+                <field name="name"/>
+                <field name="schedule_table_id"/>
+                <field name="lesson_date"/>
+                <field name="lesson_start_time"/>
+                <field name="lesson_end_time"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_le_schedule_lesson_form" model="ir.ui.view">
+        <field name="name">le.schedule.lesson.form</field>
+        <field name="model">le.schedule.lesson</field>
+        <field name="arch" type="xml">
+            <form string="Schedule Lesson">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="schedule_table_id"/>
+                    </group>
+                    <group>
+                        <field name="lesson_date"/>
+                        <field name="lesson_start_time"/>
+                        <field name="lesson_end_time"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_le_schedule_lesson" model="ir.actions.act_window">
+        <field name="name">Schedule Lessons</field>
+        <field name="res_model">le.schedule.lesson</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_le_schedule_lesson"
+              name="Schedule Lessons"
+              parent="menu_le_root"
+              action="action_le_schedule_lesson"/>
+</odoo>

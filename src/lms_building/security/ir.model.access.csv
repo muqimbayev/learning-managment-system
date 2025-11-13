@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_lb_building_user,access.lb.building.user,model_lb_building,base.group_user,1,1,1,1
+access_lb_floor_user,access.lb.floor.user,model_lb_floor,base.group_user,1,1,1,1
+access_lb_room_user,access.lb.room.user,model_lb_room,base.group_user,1,1,1,1

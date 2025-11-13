@@ -1,0 +1,25 @@
+<odoo>
+    <data noupdate="1">
+        <record id="weekday_monday" model="common.weekday">
+            <field name="name">monday</field>
+        </record>
+        <record id="weekday_tuesday" model="common.weekday">
+            <field name="name">tuesday</field>
+        </record>
+        <record id="weekday_wednesday" model="common.weekday">
+            <field name="name">wednesday</field>
+        </record>
+        <record id="weekday_thursday" model="common.weekday">
+            <field name="name">thursday</field>
+        </record>
+        <record id="weekday_friday" model="common.weekday">
+            <field name="name">friday</field>
+        </record>
+        <record id="weekday_saturday" model="common.weekday">
+            <field name="name">saturday</field>
+        </record>
+        <record id="weekday_sunday" model="common.weekday">
+            <field name="name">sunday</field>
+        </record>
+    </data>
+</odoo>

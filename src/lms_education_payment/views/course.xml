@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record model="ir.ui.view">
+            <field name="name">Course Form</field>
+            <field name="model">education.course</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_payments"
+                                    type="object"
+                                    class="oe_stat_button"
+                                    icon="fa-money-check-dollar"
+                                    invisible="payment_count == 0">
+                                <field name="payment_count" widget="statinfo" string="Payments"/>
+                            </button>
+                        </div>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

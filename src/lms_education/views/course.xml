@@ -1,0 +1,52 @@
+<odoo>
+    <record id="view_le_course_list" model="ir.ui.view">
+        <field name="name">le.course.list</field>
+        <field name="model">le.course</field>
+        <field name="arch" type="xml">
+            <list string="Courses">
+                <field name="name"/>
+                <field name="status"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_le_course_form" model="ir.ui.view">
+        <field name="name">le.course.form</field>
+        <field name="model">le.course</field>
+        <field name="arch" type="xml">
+            <form string="Course">
+                <header>
+                    <button name="create_schedule_lesson" string="Lesson schedule" type="object" class="btn-primary"/>
+                    <field name="status" widget="statusbar" statusbar_visible="draft,open,closed"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="status"/>
+                        <field name="subject_ids" widget="many2many_tags"/>
+                    </group>
+
+                    <notebook>
+                        <page string="Lessons">
+                            <field name="lesson_ids">
+                                <list editable="bottom">
+                                    <field name="name"/>
+                                    <field name="course_id"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_le_course" model="ir.actions.act_window">
+        <field name="name">Courses</field>
+        <field name="res_model">le.course</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_le_root" name="Learning"/>
+    <menuitem id="menu_le_course" name="Courses" parent="menu_le_root" action="action_le_course"/>
+</odoo>

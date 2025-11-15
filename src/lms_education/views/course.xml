@@ -16,8 +16,12 @@
         <field name="arch" type="xml">
             <form string="Course">
                 <header>
-                    <button name="create_schedule_lesson" string="Lesson schedule" type="object" class="btn-primary"/>
                     <field name="status" widget="statusbar" statusbar_visible="draft,open,closed"/>
+
+                    <button name="action_open" string="Open" type="object" class="btn-primary" invisible="status not in ['draft', 'closed']"/>
+                    <button name="action_close" string="Close" type="object" class="btn-danger" invisible="status not in ['draft', 'open']"/>
+                    <button name="action_reset_draft" string="Reset" type="object" class="btn-info" invisible="status not in ['closed']"/>
+
                 </header>
                 <sheet>
                     <group>

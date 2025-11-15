@@ -7,7 +7,7 @@ class ScheduleLesson(models.Model):
 
     name = fields.Char(string="Name", required=True)
     schedule_table_id = fields.Many2one("le.schedule.table", string="Schedule", required=True)
-
+    group_id = fields.Many2one('le.group', string="Group")
     lesson_date = fields.Date(string="Lesson Date", required=True)
     lesson_start_time = fields.Float(string="Start Time", required=True)
     lesson_end_time = fields.Float(string="End Time", required=True)

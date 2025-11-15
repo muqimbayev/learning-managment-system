@@ -8,7 +8,7 @@ class ScheduleTable(models.Model):
     _description = "Schedule Table"
 
     name = fields.Char(string="Name", required=True)
-    group_id = fields.Many2one("le.course", string="Group", required=True)
+    group_id = fields.Many2one("le.group", string="Group", required=True)
     schedule_lesson_ids = fields.One2many("le.schedule.lesson", "schedule_table_id", string="Schedule Lessons")
 
     teacher_id = fields.Many2one("res.users", string="Teacher", required=True)
@@ -64,6 +64,7 @@ class ScheduleTable(models.Model):
                         "lesson_date": current_date,
                         "lesson_start_time": rec.lesson_start_time,
                         "lesson_end_time": rec.lesson_end_time,
+                        'group_id': rec.group_id.id
                     })
                     count += 1
 

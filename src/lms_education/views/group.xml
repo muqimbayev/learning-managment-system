@@ -16,7 +16,7 @@
         <field name="arch" type="xml">
             <form string="Group">
                         <header>
-                            <button name="action_generate_lessons"
+                            <button name="create_schedule_lesson"
                                     type="object"
                                     string="Generate Lessons"
                                     class="btn-primary"/>
@@ -37,6 +37,19 @@
                                 </list>
                             </field>
                         </page>
+
+                        <page string="Lessons schedule">
+                            <field name="table_schedule_ids">
+                                <list editable="bottom">
+                                    <field name="name"/>
+                                    <field name="start_date"/>
+                                    <field name="lesson_start_time"/>
+                                    <field name="lesson_end_time"/>
+                                </list>
+                            </field>
+                        </page>
+
+
                     </notebook>
                 </sheet>
             </form>

@@ -17,15 +17,20 @@ class Course(models.Model):
         ("closed", "Closed"),
     ], default="draft", required=True)
 
-    def create_schedule_lesson(self):
-            self.ensure_one()
+    
+    def action_open(self):
+        for record in self:
+            if record.status == "draft" or record.status == "closed":
+                record.status = "open"
 
-            return {
-                "type": "ir.actions.act_window",
-                "res_model": "le.schedule.table",
-                "view_mode": "form",
-                "target": "new",
-                "context": {
-                    "default_group_id": self.id,  
-                }
-            }
+    def action_close(self):
+        for record in self:
+            if record.status == "draft" or record.status == "open":
+                record.status = "closed"
+
+    def action_reset_draft(self):
+        for record in self:
+            if record.status == "closed":
+                record.status = "draft"
+
+

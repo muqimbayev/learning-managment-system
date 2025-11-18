@@ -11,3 +11,4 @@ class Lesson(models.Model):
     name = fields.Char(string="Name", required=True)
     course_id = fields.Many2one("le.course", string="Course", required=True)
     homework_ids = fields.One2many("le.homework", "lesson_id", string="Homeworks")
+

@@ -12,32 +12,31 @@ class ScheduleTable(models.Model):
     schedule_lesson_ids = fields.One2many("le.schedule.lesson", "schedule_table_id", string="Schedule Lessons")
 
     teacher_id = fields.Many2one("res.users", string="Teacher", required=True)
-
     start_date = fields.Date(string="Start Date", required=True)
     weekday_ids = fields.Many2many("common.weekday", string="Weekdays", required=True)
     lesson_start_time = fields.Float(string="Start Time", required=True)
     lesson_end_time = fields.Float(string="End Time", required=True)
-    lesson_count = fields.Integer(string="Lesson count", default=10)
 
     @api.model_create_multi
     def create(self, vals_list):
         records = super().create(vals_list)
 
         weekday_index = {
-            "monday": 0,
-            "tuesday": 1,
-            "wednesday": 2,
-            "thursday": 3,
-            "friday": 4,
-            "saturday": 5,
-            "sunday": 6,
-        }
+                    "monday": 0,
+                    "tuesday": 1,
+                    "wednesday": 2,
+                    "thursday": 3,
+                    "friday": 4,
+                    "saturday": 5,
+                    "sunday": 6,
+                }
 
         for rec in records:
+            lesson_count = self.env['le.lesson'].search([('course_id', '=', rec.group_id.course_id.id)])
 
             group_check = self.env["le.schedule.table"].search_count([
                 ("group_id", "=", rec.group_id.id),
-                ("lesson_start_time", "=", rec.lesson_start_time),
+                    ("lesson_start_time", "<", rec.lesson_end_time), ("lesson_end_time", ">", rec.lesson_start_time),
                 ("weekday_ids", "in", rec.weekday_ids.ids),
             ])
             if group_check > 1:  
@@ -45,21 +44,22 @@ class ScheduleTable(models.Model):
 
             teacher_check = self.env["le.schedule.table"].search_count([
                 ("teacher_id", "=", rec.teacher_id.id),
-                ("lesson_start_time", "=", rec.lesson_start_time),
+                    ("lesson_start_time", "<", rec.lesson_end_time), ("lesson_end_time", ">", rec.lesson_start_time),
                 ("weekday_ids", "in", rec.weekday_ids.ids),
             ])
             if teacher_check > 1:
                 raise ValidationError("Bu o'qituvchini shu vaqtda darsi bor")
 
-            weekday_numbers = [weekday_index[w.name.lower()] for w in rec.weekday_ids]
-
             current_date = rec.start_date
-            count = 1
+            count = 0
+        
+            # week_numbers = [int(x) for x in rec.weekday_ids.mapped("sequence_num")]
+            week_numbers = [weekday_index[w.name.lower()] for w in rec.weekday_ids]        
 
-            while count <= rec.lesson_count:
-                if current_date.weekday() in weekday_numbers:
+            while count < len(lesson_count):
+                if current_date.weekday() in week_numbers:
                     self.env["le.schedule.lesson"].create({
-                        "name": f"{rec.group_id.name} - {count}",
+                        "name": f"{lesson_count[count].name}",
                         "schedule_table_id": rec.id,
                         "lesson_date": current_date,
                         "lesson_start_time": rec.lesson_start_time,

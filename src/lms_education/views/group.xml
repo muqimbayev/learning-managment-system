@@ -15,6 +15,13 @@
         <field name="model">le.group</field>
         <field name="arch" type="xml">
             <form string="Group">
+
+            <div class="oe_button_box" name="button_box">
+                <button name="button_lesson" type="object"
+                    class="oe_stat_button" icon="fa-pencil-square-o">
+                    <field name='lesson_count' widget='statinfo' string="Buyurtmalar"/>
+                </button>
+            </div>
                         <header>
                             <button name="create_schedule_lesson"
                                     type="object"
@@ -38,13 +45,14 @@
                             </field>
                         </page>
 
-                        <page string="Lessons schedule">
+                        <page string="Lessons schedule" readonly="1">
                             <field name="table_schedule_ids">
-                                <list editable="bottom">
+                                <list>
                                     <field name="name"/>
                                     <field name="start_date"/>
-                                    <field name="lesson_start_time"/>
-                                    <field name="lesson_end_time"/>
+                                    <field name="lesson_start_time" widget="float_time"/>
+                                    <field name="lesson_end_time" widget="float_time"/>
+
                                 </list>
                             </field>
                         </page>

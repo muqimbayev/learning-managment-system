@@ -1,0 +1,13 @@
+<odoo>
+<record id="le_schedule_lesson_search" model="ir.ui.view">
+    <field name="name">le.schedule.lesson.search</field>
+    <field name="model">le.schedule.lesson</field>
+    <field name="arch" type="xml">
+        <search>
+            <filter name="draft_filter"
+                    string="Draft"
+                    domain="[('status', '=', 'draft')]"/>
+        </search>
+    </field>
+</record>
+</odoo>

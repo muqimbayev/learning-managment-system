@@ -16,8 +16,9 @@
         <field name="name">le.schedule.table.form</field>
         <field name="model">le.schedule.table</field>
         <field name="arch" type="xml">
-            <form string="Schedule Table">
+            <form string="Schedule Table" edit="false">
                 <sheet>
+                
                     <group>
                         <group>
                             <field name="name"/>
@@ -26,8 +27,8 @@
                             <field name="start_date"/>
                         </group>
                         <group>
-                            <field name="lesson_start_time"/>
-                            <field name="lesson_end_time"/>
+                            <field name="lesson_start_time" widget="float_time"/>
+                            <field name="lesson_end_time" widget="float_time"/>
                             <field name="weekday_ids" widget="many2many_tags"/>
                         </group>
                     </group>
@@ -38,8 +39,8 @@
                                 <list editable="bottom">
                                     <field name="name"/>
                                     <field name="lesson_date"/>
-                                    <field name="lesson_start_time"/>
-                                    <field name="lesson_end_time"/>
+                                    <field name="lesson_start_time" widget="float_time"/>
+                                    <field name="lesson_end_time" widget="float_time"/>
                                 </list>
                             </field>
                         </page>

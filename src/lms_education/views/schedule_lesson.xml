@@ -7,8 +7,9 @@
                 <field name="name"/>
                 <field name="schedule_table_id"/>
                 <field name="lesson_date"/>
-                <field name="lesson_start_time"/>
-                <field name="lesson_end_time"/>
+                <field name="group_id"/>
+                <field name="lesson_start_time" widget="float_time"/>
+                <field name="lesson_end_time" widget="float_time"/>
             </list>
         </field>
     </record>
@@ -17,16 +18,19 @@
         <field name="name">le.schedule.lesson.form</field>
         <field name="model">le.schedule.lesson</field>
         <field name="arch" type="xml">
-            <form string="Schedule Lesson">
+            <form string="Schedule Lesson" edit="False">
+            <header>
+                <button name="action_archive" string="Darsni boshlash" type="object" class="btn-primary" invisible = "status in ['passed', 'canceled']"/>
+            </header>
                 <sheet>
                     <group>
                         <field name="name"/>
-                        <field name="schedule_table_id"/>
+                        <field name="group_id"/>
                     </group>
                     <group>
-                        <field name="lesson_date"/>
-                        <field name="lesson_start_time"/>
-                        <field name="lesson_end_time"/>
+                        <field name="lesson_start_time" widget="float_time"/>
+                        <field name="lesson_end_time" widget="float_time"/>
+                                                <field name="lesson_date"/>
                     </group>
                 </sheet>
             </form>

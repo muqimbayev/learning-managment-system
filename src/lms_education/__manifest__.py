@@ -12,7 +12,7 @@
         'views/lesson.xml',
         'views/schedule_lesson.xml',
         'views/schedule_table.xml',
-        # 'views/subject.xml',
+        'views/lesson_search.xml',
 
 
 

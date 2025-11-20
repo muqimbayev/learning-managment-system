@@ -48,29 +48,28 @@ class ScheduleLesson(models.Model):
         pass
 
     def delete_lesson(self):
+
+        # barcha darslar tartib bilan
         lessons = self.env['le.schedule.lesson'].search(
             [('schedule_table_id', '=', self.schedule_table_id.id)],
-            order='lesson_date asc'
+            order='lesson_date asc, id asc'
         )
 
-        id_lesson = lessons.ids.index(self.id)
-        print(lessons)
-        next_lessons = lessons[id_lesson+1:]
+        lesson_id = lessons.ids.index(self.id)
 
-        prev_name = self.name
-        for lesson in next_lessons:
-            current_name = lesson.name
-            lesson.write({'name': prev_name})
-            prev_name = current_name
+        next_lessons = lessons[lesson_id+1:]
 
+        prev_name = next_lessons[0].name 
+        self.name = prev_name           
+
+        for i in range(1, len(next_lessons)):
+            current_lesson = next_lessons[i]
+            next_lessons[i-1].name = current_lesson.name  
         next_lessons[-1].unlink()
 
-        return self.unlink()
-
-
-
+        
     def button_passed(self):
-        self.status = "passed"
-    
+            self.status = "passed"
+        
 
 

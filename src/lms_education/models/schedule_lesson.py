@@ -49,7 +49,6 @@ class ScheduleLesson(models.Model):
 
     def delete_lesson(self):
 
-        # barcha darslar tartib bilan
         lessons = self.env['le.schedule.lesson'].search(
             [('schedule_table_id', '=', self.schedule_table_id.id)],
             order='lesson_date asc, id asc'

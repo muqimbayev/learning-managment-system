@@ -2,31 +2,31 @@
     <data noupdate="0">
         <record id="weekday_monday" model="common.weekday">
             <field name="name">monday</field>
-            <field name="sequence_num">0</field>
+            <field name="sequence_num" eval="0"/>
         </record>
         <record id="weekday_tuesday" model="common.weekday">
             <field name="name">tuesday</field>
-            <field name="sequence_num">1</field>
+            <field name="sequence_num" eval="1"/>
         </record>
         <record id="weekday_wednesday" model="common.weekday">
             <field name="name">wednesday</field>
-            <field name="sequence_num">2</field>
+            <field name="sequence_num" eval="2"/>
         </record>
         <record id="weekday_thursday" model="common.weekday">
             <field name="name">thursday</field>
-            <field name="sequence_num">3</field>
+            <field name="sequence_num" eval="3"/>
         </record>
         <record id="weekday_friday" model="common.weekday">
             <field name="name">friday</field>
-            <field name="sequence_num">4</field>
+            <field name="sequence_num" eval="4"/>
         </record>
         <record id="weekday_saturday" model="common.weekday">
             <field name="name">saturday</field>
-            <field name="sequence_num">5</field>
+            <field name="sequence_num" eval="5"/>
         </record>
         <record id="weekday_sunday" model="common.weekday">
             <field name="name">sunday</field>
-            <field name="sequence_num">6</field>
+            <field name="sequence_num" eval="6"/>
         </record>
     </data>
 </odoo>

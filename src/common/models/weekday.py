@@ -6,4 +6,4 @@ class Weekday(models.Model):
     _description = "Weekday"
 
     name = fields.Char(string="Name", required=True)
-    sequence_num = fields.Integer(string="Sequence")
+    sequence_num = fields.Integer(string="Sequence", default=0)

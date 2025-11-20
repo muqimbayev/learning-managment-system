@@ -20,7 +20,14 @@
         <field name="arch" type="xml">
             <form string="Schedule Lesson" edit="False">
             <header>
-                <button name="action_archive" string="Darsni boshlash" type="object" class="btn-primary" invisible = "status in ['passed', 'canceled']"/>
+                <field name="status" widget="statusbar" statusbar_visible="draft,passed,canceled,transfer"/>
+
+            <button name="button_passed" string="Darsni boshlash" type="object" class="btn-primary" invisible = "status in ['passed', 'canceled', 'transfer']"/>
+            <button name="leaving_lesson" string="Darsni qoldirish" type="object" class="btn-primary" invisible = "status in ['passed', 'canceled', 'transfer']"/>
+
+            <button name="transfer_lesson" string="Darsni ko'chirish" type="object" class="btn-primary" invisible = "status in ['passed', 'canceled', 'transfer']" confirm="Dars kunlarii ko'chirhshni tasdiqlaysizmi?"/>
+            <button name="delete_lesson" string="Darsni o'chirish" type="object" class="btn-danger" invisible = "status in ['passed', 'canceled', 'transfer']" confirm="Darsni o'chirishni tasdiqlaysizmi?"/>
+
             </header>
                 <sheet>
                     <group>

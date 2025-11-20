@@ -1,5 +1,5 @@
 from odoo import models, fields
-
+from datetime import timedelta
 
 class ScheduleLesson(models.Model):
     _name = "le.schedule.lesson"
@@ -12,5 +12,60 @@ class ScheduleLesson(models.Model):
     lesson_date = fields.Date(string="Lesson Date", required=True)
     lesson_start_time = fields.Float(string="Start Time", required=True)
     lesson_end_time = fields.Float(string="End Time", required=True)
-    status = fields.Selection([('draft', 'New'), ('passed', 'Passed'), ('canceled', 'Bekor qilingan'), ('left', 'Left')], default="draft")
+    status = fields.Selection([('draft', 'Yangi'), ('passed', "O'tilgan"), ('canceled', 'Bekor qilingan'), ('transfer', "Ko'chirildi")], default="draft")
+
+    def leaving_lesson(self):
+        self.status = 'transfer'
+        name = self.name
+
+        lessons = self.env['le.schedule.lesson'].search([('status', '=', 'draft'), ('schedule_table_id', '=', self.schedule_table_id.id), 
+        ('lesson_date', '>', self.lesson_date)], order='lesson_date asc')
+
+        for lesson in lessons:
+            lesson_name = lesson.name
+            lesson.name = name
+            name = lesson_name
+
+        weekday_index = {
+                    "monday": 0,
+                    "tuesday": 1,
+                    "wednesday": 2,
+                    "thursday": 3,
+                    "friday": 4,
+                    "saturday": 5,
+                    "sunday": 6,
+                }
+        week_numbers = [weekday_index[w.name.lower()] for w in lessons[0].schedule_table_id.weekday_ids]        
+        
+        lesson_date = lessons[-1].lesson_date+timedelta(days=1)
+        while True:
+            if lesson_date.weekday() in week_numbers:
+                self.env['le.schedule.lesson'].create({'name':name, 'schedule_table_id':self.schedule_table_id.id, 'group_id': self.group_id.id, 'lesson_date':lesson_date, "lesson_start_time": self.lesson_start_time, "lesson_end_time":self.lesson_end_time})
+                break
+            lesson_date += timedelta(days=1)
+
+    def transfer_lesson(self):
+        pass
+
+    def delete_lesson(self):
+        lessons = self.env['le.schedule.lesson'].search(
+            [('schedule_table_id', '=', self.schedule_table_id.id)],
+            order='lesson_date asc'
+        )
+
+        ids = lessons.ids.index(self.id)
+
+        next_lessons = lessons[ids+1:]
+
+        prev_name = self.name
+        for lesson in next_lessons:
+            current_name = lesson.name
+            lesson.write({'name': prev_name})
+            prev_name = current_name
+
+
+    def button_passed(self):
+        self.status = "passed"
+    
+
 

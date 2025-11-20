@@ -20,7 +20,7 @@ class ScheduleLesson(models.Model):
 
         lessons = self.env['le.schedule.lesson'].search([('status', '=', 'draft'), ('schedule_table_id', '=', self.schedule_table_id.id), 
         ('lesson_date', '>', self.lesson_date)], order='lesson_date asc')
-
+        print(lessons)
         for lesson in lessons:
             lesson_name = lesson.name
             lesson.name = name
@@ -53,15 +53,20 @@ class ScheduleLesson(models.Model):
             order='lesson_date asc'
         )
 
-        ids = lessons.ids.index(self.id)
-
-        next_lessons = lessons[ids+1:]
+        id_lesson = lessons.ids.index(self.id)
+        print(lessons)
+        next_lessons = lessons[id_lesson+1:]
 
         prev_name = self.name
         for lesson in next_lessons:
             current_name = lesson.name
             lesson.write({'name': prev_name})
             prev_name = current_name
+
+        next_lessons[-1].unlink()
+
+        return self.unlink()
+
 
 
     def button_passed(self):

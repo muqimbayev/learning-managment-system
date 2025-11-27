@@ -6,6 +6,7 @@ class Course(models.Model):
 
     payment_ids = fields.One2many("lp.payment", "course_id")
     payment_count = fields.Integer(compute="_compute_payment_count")
+    
 
     def _compute_payment_count(self):
         for record in self:

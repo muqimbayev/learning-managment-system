@@ -1,3 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from . import models
+from . import payment
+from . import course
+from . import group
+from . import student_schedule
+from . import user
+

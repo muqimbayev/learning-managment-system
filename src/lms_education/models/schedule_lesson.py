@@ -69,6 +69,8 @@ class ScheduleLesson(models.Model):
         
     def button_passed(self):
             self.status = "passed"
+
+    
         
 
 

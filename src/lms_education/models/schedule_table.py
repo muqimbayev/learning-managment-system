@@ -58,7 +58,7 @@ class ScheduleTable(models.Model):
 
             while count < len(lesson_count):
                 if current_date.weekday() in week_numbers:
-                    self.env["le.schedule.lesson"].create({
+                    new_lesson = self.env["le.schedule.lesson"].create({
                         "name": f"{lesson_count[count].name}",
                         "schedule_table_id": rec.id,
                         "lesson_date": current_date,
@@ -67,6 +67,12 @@ class ScheduleTable(models.Model):
                         'group_id': rec.group_id.id
                     })
                     count += 1
+
+                    #Lesson Payment uchun scheule
+                    lesson_id = new_lesson.id
+                    students = rec.group_id.student_ids
+                    for student in students:
+                        self.env['le.schedule_student_lesson'].create({"schedule_lesson_id": lesson_id, "student_id": student.id, "payment_id": False})
 
                 current_date += timedelta(days=1)
 

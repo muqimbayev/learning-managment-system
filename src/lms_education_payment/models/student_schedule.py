@@ -29,8 +29,9 @@ class ScheduleStudentLesson(models.Model):
                         self.env['le.payment'].create({'detailed_type': 'lesson_payment', 'schedule_student_lesson_id':self.id, 'amount':amount})
                         student.student_id.balance = student.student_id.balance - amount
                         #Teacher
-                        self.env['le.payment'].create({'detailed_type': 'expense', 'teacher_id': self.schedule_lesson_id.schedule_table_id.teacher_id.id, 'amount':amount})
-                        self.schedule_lesson_id.schedule_table_id.teacher_id.balance+=amount_teacher
+                        if self.schedule_lesson_id.schedule_table_id.teacher_payment_type == 'per_lesson':
+                            self.env['le.payment'].create({'detailed_type': 'expense', 'teacher_id': self.schedule_lesson_id.schedule_table_id.teacher_id.id, 'amount':amount})
+                            self.schedule_lesson_id.schedule_table_id.teacher_id.balance+=amount_teacher
 
                         
 
@@ -51,8 +52,9 @@ class ScheduleStudentLesson(models.Model):
                         self.env['le.payment'].create({'detailed_type': 'lesson_payment', 'schedule_student_lesson_id':self.id, 'amount':amount})
                         student.student_id.balance-=amount
                         #Teacher
-                        self.env['le.payment'].create({'detailed_type': 'expense', 'teacher_id': self.schedule_lesson_id.schedule_table_id.teacher_id.id, 'amount':amount})
-                        self.schedule_lesson_id.schedule_table_id.teacher_id.balance+=amount_teacher
+                        if self.schedule_lesson_id.schedule_table_id.teacher_payment_type == 'per_month':
+                            self.env['le.payment'].create({'detailed_type': 'expense', 'teacher_id': self.schedule_lesson_id.schedule_table_id.teacher_id.id, 'amount':amount})
+                            self.schedule_lesson_id.schedule_table_id.teacher_id.balance+=amount_teacher
 
 
 

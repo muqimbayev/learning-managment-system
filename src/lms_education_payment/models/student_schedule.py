@@ -1,6 +1,6 @@
 from odoo import fields, models, api
-from datetime import datetime
 from datetime import datetime, time
+
 
 class ScheduleStudentLesson(models.Model):
     _name = "le.schedule_student_lesson"
@@ -15,43 +15,105 @@ class ScheduleStudentLesson(models.Model):
         minute = int((f - hour) * 60)
         return time(hour, minute)
 
+    #per lesson bilan kelishilgan
+
+    @api.model
     def payment_action_daily(self):
         today = datetime.today().date()
         now_time = datetime.now().time()
-        students = self.env['le.group.student'].search([('status', '=', 'active'), ('group_id.payment_type', '=', 'per_lesson')])
-        for student in students:
-            for table in student.group_id.table_schedule_ids:
+
+        # Active studentlar olinadi  per lesson uchun
+        students = self.env['le.group.student'].search([
+            ('status', '=', 'active'),
+            ('group_id.payment_type', '=', 'per_lesson')
+        ])
+
+        for gs in students:  # gs = group student obejtlarini
+            for table in gs.group_id.table_schedule_ids:
                 for lesson in table.schedule_lesson_ids:
+
+                    # dars vaqtini tekshirish
                     lesson_end = self.float_to_time(lesson.lesson_end_time)
+                    if not (lesson.lesson_date <= today and lesson_end <= now_time):
+                        continue
+
+                    ssl = self.search([
+                        ('schedule_lesson_id', '=', lesson.id),
+                        ('student_id', '=', gs.student_id.id)
+                    ], limit=1)
+
+                    # avoid double payment
+                    if ssl.payment_id:
+                        continue
+
+                    # narxlar shunchaki yozib qo'yildi
                     amount = 1000
-                    amount_teacher = 200
-                    if lesson.lesson_date <= today and lesson_end <= now_time:
-                        self.env['le.payment'].create({'detailed_type': 'lesson_payment', 'schedule_student_lesson_id':self.id, 'amount':amount})
-                        student.student_id.balance = student.student_id.balance - amount
-                        #Teacher
-                        if self.schedule_lesson_id.schedule_table_id.teacher_payment_type == 'per_lesson':
-                            self.env['le.payment'].create({'detailed_type': 'expense', 'teacher_id': self.schedule_lesson_id.schedule_table_id.teacher_id.id, 'amount':amount})
-                            self.schedule_lesson_id.schedule_table_id.teacher_id.balance+=amount_teacher
+                    teacher_amount = 200
 
+                    # payment modeli yaratiladi
+                    pay = self.env['le.payment'].create({
+                        'detailed_type': 'lesson_payment',
+                        'schedule_student_lesson_id': ssl.id,
+                        'amount': amount,
+                    })
+                    ssl.payment_id = pay.id
 
+                    # balansini yangilanadi
+                    gs.student_id.balance -= amount
+
+                    # teacher uchun to'lov agar 1 ta dars uchun olmoqchi bo'lsa
+                    if table.teacher_payment_type == 'per_lesson':
+                        self.env['le.payment'].create({
+                            'detailed_type': 'expense',
+                            'teacher_id': table.teacher_id.id,
+                            'amount': teacher_amount,
+                        })
+                        table.teacher_id.balance += teacher_amount
+
+    # MONTHLY to'lovlar
+    @api.model
     def payment_action_monthly(self):
         today = datetime.today().date()
         now_time = datetime.now().time()
-        students = self.env['le.group.student'].search([('status', '=', 'active'), ('group_id.payment_type', '=', 'per_month')])
-        for student in students:
-            for table in student.group_id.table_schedule_ids:
+
+        students = self.env['le.group.student'].search([
+            ('status', '=', 'active'),
+            ('group_id.payment_type', '=', 'per_month')
+        ])
+
+        for gs in students:
+            for table in gs.group_id.table_schedule_ids:
                 for lesson in table.schedule_lesson_ids:
+
                     lesson_end = self.float_to_time(lesson.lesson_end_time)
+                    if not (lesson.lesson_date <= today and lesson_end <= now_time):
+                        continue
+
+                    ssl = self.search([
+                        ('schedule_lesson_id', '=', lesson.id),
+                        ('student_id', '=', gs.student_id.id)
+                    ], limit=1)
+
+                    if ssl.payment_id:
+                        continue
+
+                    # narxlar shunchaki yozib qo'yildi
                     amount = 10000
-                    amount_teacher = 2000
-                    if lesson.lesson_date <= today and lesson_end <= now_time: #Oylik pul yechish uchun groupga start_date qo'shsak shunda boshlangan kun agar bugungu kun bilan teng bo'lsa oylik pul yechib olamiz.
-                        self.env['le.payment'].create({'detailed_type': 'lesson_payment', 'schedule_student_lesson_id':self.id, 'amount':amount})
-                        student.student_id.balance-=amount
-                        #Teacher
-                        if self.schedule_lesson_id.schedule_table_id.teacher_payment_type == 'per_month':
-                            self.env['le.payment'].create({'detailed_type': 'expense', 'teacher_id': self.schedule_lesson_id.schedule_table_id.teacher_id.id, 'amount':amount})
-                            self.schedule_lesson_id.schedule_table_id.teacher_id.balance+=amount_teacher
+                    teacher_amount = 2000
 
+                    pay = self.env['le.payment'].create({
+                        'detailed_type': 'lesson_payment',
+                        'schedule_student_lesson_id': ssl.id,
+                        'amount': amount,
+                    })
+                    ssl.payment_id = pay.id
 
+                    gs.student_id.balance -= amount
 
-        
+                    if table.teacher_payment_type == 'per_month':
+                        self.env['le.payment'].create({
+                            'detailed_type': 'expense',
+                            'teacher_id': table.teacher_id.id,
+                            'amount': teacher_amount,
+                        })
+                        table.teacher_id.balance += teacher_amount

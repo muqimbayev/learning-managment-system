@@ -17,6 +17,7 @@ class Payment(models.Model):
         ("top_up_balance", "Top Up Balance"),
         ("refund", "Refund"),
         ("expense", "Expense"),
+        ('lesson_payment', 'Lesson Payment')
     ], required=True)
     state = fields.Selection([
         ("draft", "Draft"),

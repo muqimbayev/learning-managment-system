@@ -23,29 +23,31 @@ class ScheduleTable(models.Model):
         records = super().create(vals_list)
 
         weekday_index = {
-                    "monday": 0,
-                    "tuesday": 1,
-                    "wednesday": 2,
-                    "thursday": 3,
-                    "friday": 4,
-                    "saturday": 5,
-                    "sunday": 6,
-                }
+            "monday": 0,
+            "tuesday": 1,
+            "wednesday": 2,
+            "thursday": 3,
+            "friday": 4,
+            "saturday": 5,
+            "sunday": 6,
+        }
 
         for rec in records:
             lesson_count = self.env['le.lesson'].search([('course_id', '=', rec.group_id.course_id.id)])
 
             group_check = self.env["le.schedule.table"].search_count([
                 ("group_id", "=", rec.group_id.id),
-                    ("lesson_start_time", "<", rec.lesson_end_time), ("lesson_end_time", ">", rec.lesson_start_time),
+                ("lesson_start_time", "<", rec.lesson_end_time),
+                ("lesson_end_time", ">", rec.lesson_start_time),
                 ("weekday_ids", "in", rec.weekday_ids.ids),
             ])
-            if group_check > 1:  
+            if group_check > 1:
                 raise ValidationError("Bu guruhni shu vaqtda darsi bor")
 
             teacher_check = self.env["le.schedule.table"].search_count([
                 ("teacher_id", "=", rec.teacher_id.id),
-                    ("lesson_start_time", "<", rec.lesson_end_time), ("lesson_end_time", ">", rec.lesson_start_time),
+                ("lesson_start_time", "<", rec.lesson_end_time),
+                ("lesson_end_time", ">", rec.lesson_start_time),
                 ("weekday_ids", "in", rec.weekday_ids.ids),
             ])
             if teacher_check > 1:
@@ -53,9 +55,8 @@ class ScheduleTable(models.Model):
 
             current_date = rec.start_date
             count = 0
-        
-            # week_numbers = [int(x) for x in rec.weekday_ids.mapped("sequence_num")]
-            week_numbers = [weekday_index[w.name.lower()] for w in rec.weekday_ids]        
+
+            week_numbers = [weekday_index[w.name.lower()] for w in rec.weekday_ids]
 
             while count < len(lesson_count):
                 if current_date.weekday() in week_numbers:
@@ -65,16 +66,25 @@ class ScheduleTable(models.Model):
                         "lesson_date": current_date,
                         "lesson_start_time": rec.lesson_start_time,
                         "lesson_end_time": rec.lesson_end_time,
-                        'group_id': rec.group_id.id
+                        "group_id": rec.group_id.id
                     })
                     count += 1
 
-                    #Lesson Payment uchun scheule
-                    lesson_id = new_lesson.id
-                    students = rec.group_id.student_ids
-                    for student in students:
-                        self.env['le.schedule_student_lesson'].create({"schedule_lesson_id": lesson_id, "student_id": student.id, "payment_id": False})
+                    # bu hook ekan, yani kerakli modul ornatilgan bolsa ishlaydi ornatilmasa ishlamaydi. (gpt shunday dedi)
+                    rec._create_student_payment_schedule(new_lesson)
+                    #Bu attandance uchun
+                    rec._create_student_attendance_schedule(new_lesson)
+
 
                 current_date += timedelta(days=1)
 
         return records
+
+
+    def _create_student_payment_schedule(self, new_lesson):
+        """ bo'sh hook. Payment moduli buni overwrite qiladi. """
+        return
+
+    def _create_student_attendance_schedule(self, new_lesson):
+        """attandance uchun"""
+        return

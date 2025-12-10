@@ -4,7 +4,6 @@ from odoo import models, fields
 class Course(models.Model):
     _inherit = "le.course"
 
-    payment_ids = fields.One2many("lp.payment", "course_id")
     payment_count = fields.Integer(compute="_compute_payment_count")
     
 

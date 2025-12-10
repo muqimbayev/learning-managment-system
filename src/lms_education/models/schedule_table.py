@@ -11,6 +11,7 @@ class ScheduleTable(models.Model):
     group_id = fields.Many2one("le.group", string="Group", required=True)
     schedule_lesson_ids = fields.One2many("le.schedule.lesson", "schedule_table_id", string="Schedule Lessons")
     teacher_payment_type = fields.Selection([('per_lesson', 'Per Lesson'), ('per_month', 'Per month')])
+    lesson_payment_type = fields.Selection([('per_lesson', 'Per Lesson'), ('per_month', 'Per Month')])
     teacher_id = fields.Many2one("res.users", string="Teacher", required=True)
     start_date = fields.Date(string="Start Date", required=True)
     weekday_ids = fields.Many2many("common.weekday", string="Weekdays", required=True)

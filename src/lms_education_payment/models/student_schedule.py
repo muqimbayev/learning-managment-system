@@ -33,10 +33,6 @@ class ScheduleStudentLesson(models.Model):
                             self.env['le.payment'].create({'detailed_type': 'expense', 'teacher_id': self.schedule_lesson_id.schedule_table_id.teacher_id.id, 'amount':amount})
                             self.schedule_lesson_id.schedule_table_id.teacher_id.balance+=amount_teacher
 
-                        
-
-
-
 
     def payment_action_monthly(self):
         today = datetime.today().date()

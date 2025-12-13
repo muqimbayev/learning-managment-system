@@ -1,10 +1,13 @@
 <odoo>
-<record id="attendance_lesson_view" model="ir.ui.view">
-    <field name="name">attendance.lesson.modal.tree</field> <field name="model">le.schedule_student_lesson</field>
-    <field name="arch" type="xml">
-        <list editable="bottom"> <field name="student_id" readonly="1"/>
-             <field name="attendance" widget="toggle_button"/>
-        </list>
-    </field>
-</record>
+    <record id="attendance_lesson_list_view" model="ir.ui.view">
+        <field name="name">attendance.lesson.list</field>
+        <field name="model">le.schedule_student_lesson</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="student_id" readonly="1"/>
+                <field name="attendance" widget="toggle_button"/>
+                <field name="attandance_date"/>
+            </list>
+        </field>
+    </record>
 </odoo>

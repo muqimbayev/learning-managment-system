@@ -82,9 +82,5 @@ class ScheduleTable(models.Model):
 
 
     def _create_student_payment_schedule(self, new_lesson):
-        """ bo'sh hook. Payment moduli buni overwrite qiladi. """
-        return
-
-    def _create_student_attendance_schedule(self, new_lesson):
-        """attandance uchun"""
+        #bo'sh hook. Payment moduli buni overwrite qiladi
         return

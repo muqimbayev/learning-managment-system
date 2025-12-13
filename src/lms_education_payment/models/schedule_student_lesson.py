@@ -7,7 +7,7 @@ class ScheduleStudentLesson(models.Model):
     _description = "Schedule Student Lesson"
 
     schedule_lesson_id = fields.Many2one('le.schedule.lesson')
-    student_id = fields.Many2one('res.users')
+    student_id = fields.Many2one('le.group.student')
     payment_id = fields.Many2one('le.payment')
 
     def float_to_time(self, f):

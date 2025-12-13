@@ -16,6 +16,17 @@
         <field name="model">le.group.student</field>
         <field name="arch" type="xml">
             <form string="Group Student">
+            
+            <div class="oe_button_box" name="button_box">
+                <button name="action_attendance"
+                    type="object"
+                    class="oe_stat_button"
+                    icon="fa-money-check-dollar"
+                    invisible="attandance_count == 0">
+                    <field name="attandance_count" widget="statinfo" string="Attandances"/>
+                </button>
+            </div>
+
                 <sheet>
                     <group>
                         <field name="group_id"/>
